@@ -1,10 +1,11 @@
 import {Router, Request, Response, NextFunction} from "express";
 import {StatusCodes} from "http-status-codes";
+import useRepository from "../repositories/useRepository";
 
 const usersRoute = Router();
 
-usersRoute.get("/users", (req: Request, res: Response, next: NextFunction) => {
-    const users = [{name: 'Gilson Alves de Souza'}];
+usersRoute.get("/users", async (req: Request, res: Response, next: NextFunction) => {
+    const users = await useRepository.findAllUsers();
     res.status(StatusCodes.OK).send({users});
 });
 
@@ -13,9 +14,10 @@ usersRoute.get("/users/:id", (req: Request<{ id: string }>, res: Response, next:
     res.status(StatusCodes.OK).send({id});
 });
 
-usersRoute.post("/users", (req: Request, res: Response, next: NextFunction) => {
+usersRoute.post("/users", async (req: Request, res: Response, next: NextFunction) => {
     const newUser = req.body;
-    res.status(StatusCodes.OK).send(newUser);
+    const id = await useRepository.create(newUser);
+    res.status(StatusCodes.OK).send({id});
 });
 
 usersRoute.put("/users/:id", (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
