@@ -1,6 +1,7 @@
 import express from 'express';
 import usersRoute from "./routes/users.routes";
 import statusRoutes from "./routes/status.routes";
+require('./database');
 
 const app = express();
 const host = 'http://localhost:';

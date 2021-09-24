@@ -1,5 +1,7 @@
 import {Router, Request, Response, NextFunction} from "express";
 import {StatusCodes} from "http-status-codes";
+// const Users = require("../models/Users");
+import Users from "../models/Users";
 
 const usersRoute = Router();
 
@@ -13,8 +15,9 @@ usersRoute.get("/users/:id", (req: Request<{ id: string }>, res: Response, next:
     res.status(StatusCodes.OK).send({id});
 });
 
-usersRoute.post("/users", (req: Request, res: Response, next: NextFunction) => {
-    const newUser = req.body;
+usersRoute.post("/users", async(req: Request, res: Response, next: NextFunction) => {
+    const {name, email, password} = req.body;
+    const newUser = await Users.create({name, email, password});
     res.status(StatusCodes.OK).send(newUser);
 });
 
