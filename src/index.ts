@@ -1,10 +1,15 @@
-import express, {Request, Response, NextFunction} from 'express';
+import express from 'express';
+import usersRoute from "./routes/users.routes";
+import statusRoutes from "./routes/status.routes";
 
 const app = express();
 const host = 'http://localhost:';
 const port = 3000;
 
-app.get('/status', (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).send({foo:'bartop'});
-});
-app.listen(3000, () => console.log(`Server is running ${host}${port}`));
+app.listen(port, () => console.log(`Server is running ${host}${port}`));
+app.use(express.json());
+app.use(statusRoutes);
+app.use(usersRoute);
+
+
+
