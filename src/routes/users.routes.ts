@@ -9,20 +9,22 @@ usersRoute.get("/users", async (req: Request, res: Response, next: NextFunction)
     res.status(StatusCodes.OK).send({users});
 });
 
-usersRoute.get("/users/:id", (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+usersRoute.get("/users/:id", async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     const {id} = req.params;
-    res.status(StatusCodes.OK).send({id});
+    const user = await useRepository.findById(id);
+    res.status(StatusCodes.OK).send({user});
 });
 
 usersRoute.post("/users", async (req: Request, res: Response, next: NextFunction) => {
     const newUser = req.body;
-    const id = await useRepository.create(newUser);
-    res.status(StatusCodes.OK).send({id});
+    const user = await useRepository.merge(newUser);
+    res.status(StatusCodes.OK).send({user});
 });
 
-usersRoute.put("/users/:id", (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    const {id} = req.params;
-    res.status(StatusCodes.OK).send({id});
+usersRoute.put("/users/:id", async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+    const newUser = req.body;
+    const user = await useRepository.merge(newUser);
+    res.status(StatusCodes.OK).send({user});
 });
 
 usersRoute.delete("/users/:id", (req: Request<{ id: string }>, res: Response, next: NextFunction) => {

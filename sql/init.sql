@@ -23,3 +23,10 @@ select * from application_user;
 create extension if not exists "pgcrypto";
 
 insert into application_user(username, password) VALUES ('Gilson', crypt('1234', 'soctop'));
+
+select id, username from application_user
+where id = 'dfe5d667-69a9-4eb2-83f0-9f77678a6b8f';
+
+UPDATE application_user
+SET password='dsdfas123456789',username='Ercy Pereira'
+WHERE id='e0d53edb-c765-408d-897e-9c66fdcfad20';
