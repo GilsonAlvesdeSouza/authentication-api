@@ -10,9 +10,13 @@ usersRoute.get("/users", async (req: Request, res: Response, next: NextFunction)
 });
 
 usersRoute.get("/users/:id", async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    const {id} = req.params;
-    const user = await useRepository.findById(id);
-    res.status(StatusCodes.OK).send({user});
+    try {
+        const {id} = req.params;
+        const user = await useRepository.findById(id);
+        res.status(StatusCodes.OK).send({user});
+    } catch (error) {
+       next(error)
+    }
 });
 
 usersRoute.post("/users", async (req: Request, res: Response, next: NextFunction) => {
