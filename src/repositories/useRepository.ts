@@ -29,12 +29,18 @@ class UseRepository {
         return this.findById(newUser.id);
     }
 
+    async remove(id: string): Promise<void> {
+        const query = `delete from application_user where id=$1 returning id`;
+        const values = [id];
+        await db.query<{ id: string }>(query, values);
+    }
+
     async merge(user: User): Promise<User> {
         if (user.id) {
             const query = `UPDATE application_user
                            SET username=$2,
                                password = crypt($3, 'soctop')
-                           WHERE id = $1 returning id;`;
+                           WHERE id = $1 returning id`;
             const values = [user.id, user.username, user.password];
             const {rows} = await db.query<{ id: string }>(query, values);
             const [newUser] = rows;

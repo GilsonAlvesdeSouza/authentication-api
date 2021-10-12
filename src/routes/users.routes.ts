@@ -27,9 +27,10 @@ usersRoute.put("/users/:id", async (req: Request<{ id: string }>, res: Response,
     res.status(StatusCodes.OK).send({user});
 });
 
-usersRoute.delete("/users/:id", (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+usersRoute.delete("/users/:id", async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     const {id} = req.params;
-    res.status(StatusCodes.OK).send({id});
+    await useRepository.remove(id);
+    res.status(StatusCodes.OK).send({msg: 'Usuário removido'});
 });
 
 export default usersRoute;

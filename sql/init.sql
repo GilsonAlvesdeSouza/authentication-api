@@ -28,5 +28,7 @@ select id, username from application_user
 where id = 'dfe5d667-69a9-4eb2-83f0-9f77678a6b8f';
 
 UPDATE application_user
-SET password='dsdfas123456789',username='Ercy Pereira'
+SET password='dsdfas123456789',username='Fulano'
 WHERE id='e0d53edb-c765-408d-897e-9c66fdcfad20';
+
+delete from application_user where id='4b9c8c45-aa26-49eb-83d4-7f368c7e69c9';
