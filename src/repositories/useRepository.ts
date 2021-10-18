@@ -1,6 +1,6 @@
 import db from '../db';
 import User from "../models/useModels";
-import DatabaseError from "./errors/database.error.model";
+import DatabaseError from "../models/errors/database.error.model";
 
 class UseRepository {
     async findAllUsers(): Promise<User[]> {
