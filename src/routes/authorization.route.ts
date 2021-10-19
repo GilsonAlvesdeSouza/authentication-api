@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import ForbiddenError from "../models/errors/forbidden.error.model";
 import useRepository from "../repositories/useRepository";
+import JWT from 'jsonwebtoken';
 
 const authorizationRoute = Router();
 
@@ -28,6 +29,16 @@ authorizationRoute.post("/token", async(req: Request, res: Response, next: NextF
         }
         
         const user = await useRepository.findByUsernameAndPassword(username, password);
+
+        /* informações sobre o token
+        "iss" o dominio  da aplicação geradora de token
+        "sub" é o assunto do token, mas é muito utilizado para guardar o id do usuário 
+        "aud" define quem pode usar o token 
+        "exp" data para expiração do token 
+        "nbf" define uma data para qual o token não pode ser aceito antes dela
+        "iat" data de criação do token
+        "jti" o id do token
+        */
     } catch (error) {
         next(error);
     }
