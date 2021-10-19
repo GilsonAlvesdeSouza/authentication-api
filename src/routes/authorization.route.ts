@@ -2,10 +2,11 @@ import { NextFunction, Request, Response, Router } from "express";
 import ForbiddenError from "../models/errors/forbidden.error.model";
 import useRepository from "../repositories/useRepository";
 import JWT from 'jsonwebtoken';
+import { StatusCodes } from "http-status-codes";
 
 const authorizationRoute = Router();
 
-authorizationRoute.post("/token", async(req: Request, res: Response, next: NextFunction) => {
+authorizationRoute.post("/token", async (req: Request, res: Response, next: NextFunction) => {
 
     try {
         const autorizationHeader = req.headers['authorization'];
@@ -24,10 +25,10 @@ authorizationRoute.post("/token", async(req: Request, res: Response, next: NextF
 
         const [username, password] = tokenContent.split(":");
 
-        if(!username || !password){
+        if (!username || !password) {
             throw new ForbiddenError("Credenciais não preenchidas");
         }
-        
+
         const user = await useRepository.findByUsernameAndPassword(username, password);
 
         /* informações sobre o token
@@ -39,6 +40,19 @@ authorizationRoute.post("/token", async(req: Request, res: Response, next: NextF
         "iat" data de criação do token
         "jti" o id do token
         */
+
+        if (!user) {
+            throw new ForbiddenError("Usuário ou senha inválidos");
+        }
+
+        const jwtPayload = { username: user.username };
+        const secretkey = 'my_secret_key)';
+        const jwtOptinos = { subject: user?.id };
+
+        const jwt = JWT.sign(jwtPayload, secretkey, jwtOptinos);
+
+        res.status(StatusCodes.OK).json({ token: jwt });
+
     } catch (error) {
         next(error);
     }
