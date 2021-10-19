@@ -30,7 +30,7 @@ class UseRepository {
         const query = `insert into application_user(username, password)
                        values ($1, crypt($2, 'soctop')) returning id`;
         const values = [user.username, user.password];
-        const {rows} = await db.query<{ id: string }>(query, values);
+        const { rows } = await db.query<{ id: string }>(query, values);
         const [newUser] = rows;
         return this.findById(newUser.id);
     }
@@ -48,7 +48,7 @@ class UseRepository {
                                password = crypt($3, 'soctop')
                            WHERE id = $1 returning id`;
             const values = [user.id, user.username, user.password];
-            const {rows} = await db.query<{ id: string }>(query, values);
+            const { rows } = await db.query<{ id: string }>(query, values);
             const [newUser] = rows;
             return this.findById(newUser.id);
         }
@@ -56,9 +56,24 @@ class UseRepository {
         const query = `insert into application_user(username, password)
                        values ($1, crypt($2, 'soctop')) returning id`;
         const values = [user.username, user.password];
-        const {rows} = await db.query<{ id: string }>(query, values);
+        const { rows } = await db.query<{ id: string }>(query, values);
         const [newUser] = rows;
         return this.findById(newUser.id);
+    }
+
+    async findByUsernameAndPassword(username: string, password: string): Promise<User | null> {
+
+        try {
+            const query = `select id, username 
+                           from application_user where username = $1 
+                           and password = crypt($2, 'soctop')`;
+            const values = [username, password];
+            const { rows } = await db.query<User>(query, values);
+            const [user] = rows;
+            return user || null;
+        } catch (error) {
+            throw new DatabaseError('Erro na conssulta por usário e senha', error);
+        }
     }
 }
 
