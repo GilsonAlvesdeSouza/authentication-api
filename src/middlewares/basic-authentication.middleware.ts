@@ -41,10 +41,10 @@ async function basicAuthenticationMiddleware(req:Request, res:Response, next:Nex
         }
 
         req.user = user;
-        next();
+        return next();
         
     } catch (error) {
-        next(error);
+        return next(error);
     }
 }
 
